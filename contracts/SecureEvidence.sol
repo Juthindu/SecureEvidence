@@ -2,26 +2,19 @@
 pragma solidity ^0.8.0;
 
 contract SecureEvidence {
-    address public superAdminAddress = 0x546d61e9E3bce47133F7cC4f224cA17d4020fD6c;
+    address public superAdminAddress = 0xC1c05FC13391ac717CF5DeB109B651Dd5115F274;
     string public superAdminUsername = "SuperAdmin";
 
     enum Status {Inactive, Active}
+    enum UserRole {Admin, Level1, Level2}
 
-    struct Admin {
+    struct Account {
         string name;
         uint256 ID;
         address accountAddress;
         string username;
         Status status;
-    }
-
-    struct User {
-        string name;
-        uint256 ID;
-        uint8 userLevel; // 1 for Level 1, 2 for Level 2
-        address accountAddress;
-        string username;
-        Status status;
+        UserRole role;
     }
 
     struct Case {
@@ -42,15 +35,13 @@ contract SecureEvidence {
         Status status;
     }
 
-    mapping(address => Admin) public admins;
-    mapping(address => User) public users;
-    mapping(uint256 => address) private adminIDs;
-    mapping(uint256 => address) private userIDs;
+    mapping(address => Account) public accounts;
+    mapping(uint256 => address) private accountIDs;
     mapping(uint256 => Case) public cases;
     mapping(uint256 => Evidence[]) public caseEvidence;
 
-    uint256 public adminCount;
-    uint256 public userCount;
+    uint256 public accountCount;
+    uint256 public caseCount;
 
     modifier onlySuperAdmin() {
         require(msg.sender == superAdminAddress, "Not SuperAdmin");
@@ -58,27 +49,17 @@ contract SecureEvidence {
     }
 
     modifier onlyAdmin() {
-        require(admins[msg.sender].status == Status.Active || msg.sender == superAdminAddress, "Not an active Admin or SuperAdmin");
+        require(accounts[msg.sender].status == Status.Active && accounts[msg.sender].role == UserRole.Admin || msg.sender == superAdminAddress, "Not an active Admin");
         _;
     }
 
     modifier onlyLevelOne() {
-        require(
-            msg.sender == superAdminAddress ||
-            (admins[msg.sender].status == Status.Active) ||
-            (users[msg.sender].status == Status.Active && users[msg.sender].userLevel == 1),
-            "Not authorized"
-        );
+        require(accounts[msg.sender].status == Status.Active && accounts[msg.sender].role == UserRole.Level1 || accounts[msg.sender].role == UserRole.Admin || msg.sender == superAdminAddress, "Not an active Level 1 User");
         _;
     }
 
     modifier onlyLevelTwo() {
-        require(
-            msg.sender == superAdminAddress ||
-            (admins[msg.sender].status == Status.Active) ||
-            (users[msg.sender].status == Status.Active && (users[msg.sender].userLevel == 1 || users[msg.sender].userLevel == 2)),
-            "Not authorized"
-        );
+        require(accounts[msg.sender].status == Status.Active && accounts[msg.sender].role == UserRole.Level2 ||accounts[msg.sender].role == UserRole.Level1 || accounts[msg.sender].role == UserRole.Admin || msg.sender == superAdminAddress, "Not an active Level 2 User");
         _;
     }
 
@@ -87,18 +68,14 @@ contract SecureEvidence {
 
         if (_account == superAdminAddress && keccak256(abi.encodePacked(_username)) == keccak256(abi.encodePacked(superAdminUsername))) {
             return "Welcome SuperAdmin";
-        } else if (admins[_account].accountAddress != address(0) && keccak256(abi.encodePacked(admins[_account].username)) == keccak256(abi.encodePacked(_username))) {
-            if (admins[_account].status == Status.Active) {
-                return "Welcome Admin";
-            } else {
-                return "You cannot login, please contact Admin or SuperAdmin";
-            }
-        } else if (users[_account].accountAddress != address(0) && keccak256(abi.encodePacked(users[_account].username)) == keccak256(abi.encodePacked(_username))) {
-            if (users[_account].status == Status.Active) {
-                if (users[_account].userLevel == 1) {
-                    return "Welcome L1 User";
-                } else if (users[_account].userLevel == 2) {
-                    return "Welcome L2 User";
+        } else if (accounts[_account].accountAddress != address(0) && keccak256(abi.encodePacked(accounts[_account].username)) == keccak256(abi.encodePacked(_username))) {
+            if (accounts[_account].status == Status.Active) {
+                if (accounts[_account].role ==UserRole.Admin){
+                    return "Welcome Admin";
+                }else if (accounts[_account].role ==UserRole.Level1){
+                    return "Welcome User";
+                }else{
+                    return "Welcome";
                 }
             } else {
                 return "You cannot login, please contact Admin or SuperAdmin";
@@ -107,105 +84,45 @@ contract SecureEvidence {
         return "User not registered";
     }
 
-    function addAdmin(string memory _name, uint256 _ID, address _accountAddress, string memory _username, Status _status) public onlySuperAdmin returns (string memory){
-        require(admins[_accountAddress].accountAddress == address(0), "Admin already exists");
+    function addNewUser(string memory _name,uint256 _ID,address _accountAddress,string memory _username,Status _status,UserRole _role
+    ) public onlyAdmin returns (string memory) {
+        require(accounts[_accountAddress].accountAddress == address(0), "User already exists");
 
-        admins[_accountAddress] = Admin({
+        accounts[_accountAddress] = Account({
             name: _name,
             ID: _ID,
             accountAddress: _accountAddress,
             username: _username,
-            status: _status
+            status: _status,
+            role: _role
         });
-        
-        adminIDs[_ID] = _accountAddress;
-        adminCount++;
 
-        return "Admin created successfully";
-    }
-
-    function addUser(string memory _name, uint256 _ID, uint8 _userLevel, address _accountAddress, string memory _username, Status _status) public onlyAdmin returns (string memory){
-        require(users[_accountAddress].accountAddress == address(0), "User already exists");
-        require(_userLevel == 1 || _userLevel == 2, "Invalid user level");
-
-        users[_accountAddress] = User({
-            name: _name,
-            ID: _ID,
-            userLevel: _userLevel,
-            accountAddress: _accountAddress,
-            username: _username,
-            status: _status
-        });
-        
-        userIDs[_ID] = _accountAddress;
-        userCount++;
+        accountIDs[_ID] = _accountAddress;
+        accountCount++;
 
         return "User created successfully";
     }
 
-    function getAdminByID(uint256 _ID) public view onlySuperAdmin returns (Admin memory) {
-        address adminAddress = adminIDs[_ID];
-        require(adminAddress != address(0), "Admin not found");
-        return admins[adminAddress];
+    function updateUser(
+        uint256 _ID,
+        string memory _name,
+        address _accountAddress,
+        string memory _username,
+        Status _status
+    ) public onlyAdmin returns (string memory) {
+        require(accounts[_accountAddress].accountAddress != address(0), "User does not exist");
+        require(accounts[_accountAddress].role != UserRole.Admin || msg.sender == superAdminAddress, "Cannot update Admin role");
+
+        accounts[_accountAddress].name = _name;
+        accounts[_accountAddress].ID = _ID;
+        accounts[_accountAddress].username = _username;
+        accounts[_accountAddress].status = _status;
+
+        return "User updated successfully";
     }
 
-    function getUserByID(uint256 _ID) public view returns (User memory) {
-        address userAddress = userIDs[_ID];
-        require(userAddress != address(0), "User not found");
-
-        if (msg.sender == superAdminAddress || admins[msg.sender].status == Status.Active) {
-            return users[userAddress];
-        } else {
-            revert("Not authorized to view user data");
-        }
-    }
-
-    function updateAdmin(string memory _name, uint256 _ID, address _accountAddress, string memory _username, Status _status) public onlySuperAdmin {
-        require(admins[_accountAddress].accountAddress != address(0), "Admin does not exist");
-
-        admins[_accountAddress].name = _name;
-        admins[_accountAddress].ID = _ID;
-        admins[_accountAddress].username = _username;
-        admins[_accountAddress].status = _status;
-    }
-
-    function updateUser(uint256 _ID, string memory _name, uint8 _userLevel, address _accountAddress, string memory _username, Status _status) public onlyAdmin {
-        require(users[_accountAddress].accountAddress != address(0), "User does not exist");
-
-        users[_accountAddress].ID = _ID;
-        users[_accountAddress].name = _name;
-        users[_accountAddress].userLevel = _userLevel;
-        users[_accountAddress].username = _username;
-        users[_accountAddress].status = _status;
-    }
-
-    function getAllAdmins() public view onlySuperAdmin returns (Admin[] memory) {
-        Admin[] memory adminsArray = new Admin[](adminCount);
-        uint256 index = 0;
-        for (uint256 i = 1; i <= adminCount; i++) {
-            if (adminIDs[i] != address(0)) {
-                adminsArray[index] = admins[adminIDs[i]];
-                index++;
-            }
-        }
-        return adminsArray;
-    }
-
-    function getAllUsers() public view returns (User[] memory) {
-        require(msg.sender == superAdminAddress || admins[msg.sender].status == Status.Active, "Not authorized to view all users data");
-
-        User[] memory usersArray = new User[](userCount);
-        uint256 index = 0;
-        for (uint256 i = 1; i <= userCount; i++) {
-            if (userIDs[i] != address(0)) {
-                usersArray[index] = users[userIDs[i]];
-                index++;
-            }
-        }
-        return usersArray;
-    }
-
-    function addCase(string memory _caseTitle, uint256 _caseID, string memory _caseType, uint8 _caseLevel, string memory _reportHash) public onlyLevelOne returns (string memory){
+    function addCase(string memory _caseTitle, uint256 _caseID, string memory _caseType, uint8 _caseLevel, string memory _reportHash) 
+    public onlyLevelOne returns (string memory) {
         require(_caseLevel == 1 || _caseLevel == 2, "Invalid case level");
 
         cases[_caseID] = Case({
@@ -218,10 +135,20 @@ contract SecureEvidence {
             status: Status.Active
         });
 
+        caseCount++;
+
         return "Case added successfully";
     }
 
-    function addEvidence(uint256 _caseID, string memory _evidenceType, string memory _evidenceHash) public onlyLevelTwo returns (string memory){
+    function updateCaseStatus(uint256 _caseID, Status _status) 
+    public onlyLevelOne {
+        require(cases[_caseID].caseID != 0, "Case does not exist");
+
+        cases[_caseID].status = _status;
+    }
+
+    function addEvidence(uint256 _caseID, string memory _evidenceType, string memory _evidenceHash) 
+    public onlyLevelTwo returns (string memory) {
         require(cases[_caseID].caseID != 0, "Case does not exist");
 
         Evidence memory newEvidence = Evidence({
@@ -237,30 +164,42 @@ contract SecureEvidence {
         return "Evidence added successfully";
     }
 
-    function getEvidenceByCaseID(uint256 _caseID) public view returns (Evidence[] memory) {
+    function updateEvidenceStatus(uint256 _caseID, uint256 _evidenceIndex, Status _status) 
+    public onlyLevelOne {
+        require(cases[_caseID].caseID != 0, "Case does not exist");
+        require(_evidenceIndex < caseEvidence[_caseID].length, "Invalid evidence index");
+
+        caseEvidence[_caseID][_evidenceIndex].status = _status;
+    }
+
+    function getEvidenceByCaseID(uint256 _caseID) 
+    public onlyLevelOne view returns (Evidence[] memory) {
         require(cases[_caseID].caseID != 0, "Case does not exist");
         return caseEvidence[_caseID];
     }
 
-    function getEvidenceByType(uint256 _caseID, string memory _evidenceType) public view returns (Evidence[] memory) {
-        require(cases[_caseID].caseID != 0, "Case does not exist");
+    function getUserByID(uint256 _ID) 
+    public view onlyAdmin returns (Account memory) {
+        address userAddress = accountIDs[_ID];
+        require(userAddress != address(0), "Admin not found");
+        require(accounts[userAddress].role == UserRole.Level1 || accounts[userAddress].role == UserRole.Level2, "Not an user");
 
-        uint256 count = 0;
-        for (uint256 i = 0; i < caseEvidence[_caseID].length; i++) {
-            if (keccak256(abi.encodePacked(caseEvidence[_caseID][i].evidenceType)) == keccak256(abi.encodePacked(_evidenceType))) {
-                count++;
-            }
-        }
+        return accounts[userAddress];
+    }
 
-        Evidence[] memory filteredEvidence = new Evidence[](count);
-        uint256 index = 0;
-        for (uint256 i = 0; i < caseEvidence[_caseID].length; i++) {
-            if (keccak256(abi.encodePacked(caseEvidence[_caseID][i].evidenceType)) == keccak256(abi.encodePacked(_evidenceType))) {
-                filteredEvidence[index] = caseEvidence[_caseID][i];
-                index++;
-            }
-        }
 
-        return filteredEvidence;
+    function getAdminByID(uint256 _ID) 
+    public view onlyAdmin returns (Account memory) {
+        address adminAddress = accountIDs[_ID];
+        require(adminAddress != address(0), "Admin not found");
+        require(accounts[adminAddress].role == UserRole.Admin, "Not an admin");
+
+        return accounts[adminAddress];
+    }
+
+    function addressToIndex(uint256 _id) private view returns (address) {
+        return accountIDs[_id];
     }
 }
+
+
