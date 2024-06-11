@@ -7,8 +7,9 @@ body {
   overflow-x: hidden;
   background: linear-gradient(to right, #18e9e9, #6bebfc, #00e1ff);
 }
+/* Sidebar */
 #wrapper {
-  padding-left: 0;
+  padding-left: 5px;
   transition: all 0.5s ease;
 }
 #wrapper.toggled {
@@ -105,7 +106,7 @@ body {
   background: linear-gradient(to right bottom, #2f3441 50%, #212531 50%);
   padding-top: 1em;
 }
-.sidebar-brand h {
+.sidebar-brand h1 {
   color: #ddd;
 }
 .sidebar-brand h:hover {
@@ -208,4 +209,93 @@ body {
 }
 .hamburger.is-open .hamb-bottom, .hamburger.is-open .hamb-top {
   background-color: #1a1a1a;
+}
+.logout-button-container {
+  margin-top: auto; 
+  padding: 20px;
+  width: 100%;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #ffffff; 
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.btn-logout:hover {
+  background-color: #000000; 
+  color:  #ffffff; 
+}
+/* side logo */
+.logo{
+  width: 30%;
+  float: right; /* move element to the right side */
+  margin-top: 0.4%;
+  margin-right: .4%;
+}
+
+/* System login page */
+
+.font11{
+  font-size: 12px;
+}
+.login-container {
+  width: 50%;
+  min-width: 360px;
+  margin: auto;
+  padding: 20px;
+  background:#000000; 
+  border-radius: 10px; 
+  display: flex;
+  align-items: center;
+}
+.form-control.username-field {
+  flex: 1;
+  padding: 10px 10px;
+  height: auto;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(to right, #ffffff, #ffffff,#ffffff,#ffffff, #0a3035);
+  color: #ffffff;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+.login-button {
+  padding: 10px 20px;
+  border: none;
+  height: auto;
+  border-radius: 25px;
+  background: #ffffff;
+  color: #000000;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap; 
+  font-size: 12px;
+}
+.login-button:hover {
+  background:  #18e9e9
+}
+.login-button:hover {
+  background: #000000;
+  color: #ffffff; 
+}
+.form-control::placeholder {
+  color: #000000;
+  font-size: 12px; 
+}
+
+.form-control.username-field {
+  font-size: 12px; 
+}
+
+.errorMessage{
+  padding-top: 10px;
+  color: red;
+  font-size: 15px;
 }
