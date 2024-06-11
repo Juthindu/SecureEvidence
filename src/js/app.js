@@ -138,7 +138,8 @@ App = {
         $("#sidebar").show();
         $("#dashboard").show();
         localStorage.setItem('isLoggedIn', 'true');
-        window.location.href = "dashboard.html";
+        //window.location.href = "dashboard.html";
+        window.location.href = "test.html";
       }
     }).catch(function(error) {
       console.error(error);
