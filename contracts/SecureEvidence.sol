@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 contract SecureEvidence {
-    address private superAdminAddress = 0xC1c05FC13391ac717CF5DeB109B651Dd5115F274;
+    address private superAdminAddress = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
     string private superAdminUsername = "SuperAdmin";
 
     enum Status {Inactive, Active}
@@ -52,6 +52,8 @@ contract SecureEvidence {
     mapping(uint256 => Case) public cases;
     mapping(string => Type) public types;
     mapping(uint256 => Evidence[]) public caseEvidence;
+    mapping(string => Case[]) private casesByType;
+
 
     
     uint256 public accountCount;
@@ -178,10 +180,13 @@ contract SecureEvidence {
             return "Type added successfully";
     }
 
+
     function addCase(string memory _caseTitle,uint256 _caseID,string memory _caseType,string memory _reportHash) 
-    public onlyLevelOne returns (string memory) {
+        public onlyLevelOne returns (string memory) {
         require(bytes(types[_caseType].caseType).length != 0, "Case type does not exist");
         require(cases[_caseID].caseID == 0, "Case ID already exists");
+
+        // Add case to cases mapping
         cases[_caseID] = Case({
             caseTitle: _caseTitle,
             caseID: _caseID,
@@ -191,15 +196,33 @@ contract SecureEvidence {
             status: Status.Active
         });
         caseCount++;
+
+        // Add case to casesByType mapping
+        Case memory newCase = Case({
+            caseTitle: _caseTitle,
+            caseID: _caseID,
+            caseType: _caseType,
+            reportHash: _reportHash,
+            addedBy: msg.sender,
+            status: Status.Active
+        });
+        casesByType[_caseType].push(newCase);
+
         return "Case added successfully";
     }
 
+    function getCaseByType(string memory _caseType) public onlyLevelTwo view returns (Case[] memory) {
+    require(bytes(types[_caseType].caseType).length != 0, "Case type does not exist");
+    return casesByType[_caseType]; 
+    }
+
     //done
-    function updateCaseStatus(uint256 _caseID, Status _status) 
+    function updateCaseStatus(uint256 _caseID,uint256 _caseTypeIndex,string memory _caseType, Status _status) 
     public onlyLevelOne {
         require(cases[_caseID].caseID != 0, "Case does not exist");
-
+        require(_caseTypeIndex < casesByType[_caseType].length, "Invalid caseTypeIndex");
         cases[_caseID].status = _status;
+        casesByType[_caseType][_caseTypeIndex].status = _status;
     }
     //done
     function addEvidence(uint256 _caseID, string memory _evidenceType, string memory _evidenceHash) 
