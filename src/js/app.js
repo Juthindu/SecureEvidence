@@ -51,14 +51,14 @@ App = {
     console.log("Rendering App...");
     var loader = $("#loader");
     var content = $("#content");
-    var sidebar-form = $("#sidebar-form");
+    var pageContent = $("#page-content");
     var dashboard =$("#dashboard");
     var loginLogo =$("#loginLogo");
 
     loginLogo.show();
     loader.show();
     content.hide();
-    sidebar-form.hide();
+    pageContent.hide();
     dashboard.hide();
 
     web3.eth.getCoinbase(function(err, account) {
@@ -71,7 +71,7 @@ App = {
             $("#loginLogo").hide();
             $("#loader").hide();
             $("#content").hide();
-            $("#sidebar-form").show();
+            $("#page-content").show();
             $("#dashboard").show();
             App.resetLogoutTimer();
           } else {
@@ -135,7 +135,7 @@ App = {
         console.log("Super Admin logged ");
         $("#loginLogo").hide();
         $("#content").hide();
-        $("#sidebar-form").show();
+        $("#page-content").show();
         $("#dashboard").show();
         localStorage.setItem('isLoggedIn', 'true');
         //window.location.href = "dashboard.html";
@@ -148,7 +148,7 @@ App = {
   },
   logout: function() {
     localStorage.setItem('isLoggedIn', 'false');
-    $("#sidebar-form").hide();
+    $("#page-content").hide();
     $("#dashboard").hide();
     $("#content").show();
     $("#loginLogo").show();
@@ -172,7 +172,7 @@ $(document).ready(function() {
 });
 
 
-// sidebar-form component
+// page-content component
 
 
 $(document).ready(function () {
