@@ -51,14 +51,14 @@ App = {
     console.log("Rendering App...");
     var loader = $("#loader");
     var content = $("#content");
-    var sidebar = $("#sidebar");
+    var sidebar-form = $("#sidebar-form");
     var dashboard =$("#dashboard");
     var loginLogo =$("#loginLogo");
 
     loginLogo.show();
     loader.show();
     content.hide();
-    sidebar.hide();
+    sidebar-form.hide();
     dashboard.hide();
 
     web3.eth.getCoinbase(function(err, account) {
@@ -71,7 +71,7 @@ App = {
             $("#loginLogo").hide();
             $("#loader").hide();
             $("#content").hide();
-            $("#sidebar").show();
+            $("#sidebar-form").show();
             $("#dashboard").show();
             App.resetLogoutTimer();
           } else {
@@ -135,7 +135,7 @@ App = {
         console.log("Super Admin logged ");
         $("#loginLogo").hide();
         $("#content").hide();
-        $("#sidebar").show();
+        $("#sidebar-form").show();
         $("#dashboard").show();
         localStorage.setItem('isLoggedIn', 'true');
         //window.location.href = "dashboard.html";
@@ -148,7 +148,7 @@ App = {
   },
   logout: function() {
     localStorage.setItem('isLoggedIn', 'false');
-    $("#sidebar").hide();
+    $("#sidebar-form").hide();
     $("#dashboard").hide();
     $("#content").show();
     $("#loginLogo").show();
@@ -172,7 +172,7 @@ $(document).ready(function() {
 });
 
 
-// sidebar component
+// sidebar-form component
 
 
 $(document).ready(function () {
@@ -203,3 +203,5 @@ $(document).ready(function () {
         $('#wrapper').toggleClass('toggled');
   });  
 });
+
+
