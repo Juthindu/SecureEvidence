@@ -99,15 +99,10 @@ App = {
     $("#logoutButton").click(function() {
       App.logout();
     });
-
-    $("#addTypeForm").submit(function(event) {
-      event.preventDefault(); // Prevent the form from refreshing the page
-      App.addType();
-    });
-
     document.addEventListener('mousemove', App.resetLogoutTimer);
     document.addEventListener('keydown', App.resetLogoutTimer);
     document.addEventListener('click', App.resetLogoutTimer);
+
   },
 
   connectAccount: async function() {
@@ -124,6 +119,7 @@ App = {
       }
     }
   },
+
 
   login: function() {
     var username = $("#username").val();
@@ -150,7 +146,6 @@ App = {
       $("#loginMessage").html(error);
     });
   },
-
   logout: function() {
     localStorage.setItem('isLoggedIn', 'false');
     $("#page-content").hide();
@@ -170,114 +165,43 @@ App = {
     }
     App.logoutTimeout = setTimeout(App.logout, App.logoutTimeLimit); // Set new timeout
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  addType: async function() {
-    const caseType = document.getElementById('caseType').value;
-    const description = document.getElementById('description').value;
-    const category = document.getElementById('category').value;
-    const level = document.getElementById('level').value;
-
-    console.log('Form submitted:', { caseType, description, category, level });
-
-    try {
-      const instance = await App.contracts.SecureEvidence.deployed();
-      const result = await instance.addType(caseType, description, category, level, { from: App.account, gas: 500000 });
-      console.log('Transaction Hash:', result.tx);
-      web3.eth.getTransactionReceipt(result.tx, function(error, receipt) {
-        if (error) {
-          console.error('Error retrieving transaction receipt:', error);
-        } else {
-          console.log('Transaction Receipt:', receipt);
-          if (receipt && receipt.status) {
-            console.log('Transaction was successful and data was added');
-          } else {
-            console.log('Transaction failed or data was not added');
-          }
-        }
-      });
-    } catch (error) {
-      console.error('Error adding type:', error);
-      alert('Error adding type: ' + error.message);
-    }
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
 };
 
 $(document).ready(function() {
   App.init();
 });
 
+
 // page-content component
+
+
 $(document).ready(function () {
   var trigger = $('.hamburger'),
       overlay = $('.overlay'),
      isClosed = false;
 
-  trigger.click(function () {
-    hamburger_cross();      
-  });
+    trigger.click(function () {
+      hamburger_cross();      
+    });
 
-  function hamburger_cross() {
-    if (isClosed == true) {          
-      overlay.hide();
-      trigger.removeClass('is-open');
-      trigger.addClass('is-closed');
-      isClosed = false;
-    } else {   
-      overlay.show();
-      trigger.removeClass('is-closed');
-      trigger.addClass('is-open');
-      isClosed = true;
-    }
+    function hamburger_cross() {
+
+      if (isClosed == true) {          
+        overlay.hide();
+        trigger.removeClass('is-open');
+        trigger.addClass('is-closed');
+        isClosed = false;
+      } else {   
+        overlay.show();
+        trigger.removeClass('is-closed');
+        trigger.addClass('is-open');
+        isClosed = true;
+      }
   }
   
   $('[data-toggle="offcanvas"]').click(function () {
-    $('#wrapper').toggleClass('toggled');
+        $('#wrapper').toggleClass('toggled');
   });  
 });
+
+

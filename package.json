@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "ipfs-http-client": "^60.0.1"
+    "ipfs-http-client": "^60.0.1",
+    "web3": "^1.0.0-beta.37"
   }
 }
