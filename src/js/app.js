@@ -111,9 +111,9 @@ App = {
 
     $('#dashboard').click(function(event) {
       window.location.href = 'dashboard.html'; 
-    });
+    });addUser.html
 
-    $('#addCaseTypeLink').click(function(event) {
+    $('#addCaseType').click(function(event) {
         window.location.href = 'addType.html'; 
     });
     document.addEventListener('mousemove', App.resetLogoutTimer);

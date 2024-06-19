@@ -6,7 +6,7 @@ h1.text-center {
 body {
   position: relative;
   overflow-x: hidden;
-  background: linear-gradient(to right, rgba(24, 233, 233, 0.6), rgba(107, 235, 252, 0.6),rgba(24, 233, 233, 0.6)), url("./images/logo.png") center center no-repeat;
+  background: linear-gradient(to right, rgba(24, 233, 233, 0.6), rgba(107, 235, 252, 0.6),rgba(24, 233, 233, 0.6)), url("../images/logo.png") center center no-repeat;
   background-size: 60%;
   justify-content: center;
   align-items: center;
