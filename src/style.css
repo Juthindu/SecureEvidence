@@ -2,6 +2,7 @@ h1.text-center {
   font-size: 500%;
   text-align: center;
 }
+
 body {
   position: relative;
   overflow-x: hidden;
@@ -11,6 +12,7 @@ body {
   align-items: center;
   height: 100vh;
 }
+
 /* side logo */
 .logo{
   width: 30%;
@@ -18,12 +20,16 @@ body {
   margin-top: 0.4%;
   margin-right: .4%;
 }
+
 .logo {
   transition: transform 1s;
 }
+
 .logo img.rotated {
 transform: rotate(360deg); 
 }
+
+/* ---------------------------------------------------------------------------------------------------- */
 /* Sidebar */
 
 #wrapper {
@@ -186,6 +192,10 @@ transform: rotate(360deg);
   font-size: 15px;
 }
 
+.dropdown-topic {
+  font-size: 15px;
+}
+
 .dropdown-menu li a {
   font-size: 13px; 
 }
@@ -309,14 +319,15 @@ transform: rotate(360deg);
   color:  #ffffff; 
 }
 
+/* --------------------------------------------------------------------------------------------------- */
 /* form component  */
-
 
 .form-heading{
   margin-top: 30px;
   margin-bottom: 0px;
   font-size: 35px;
 }
+
 .section {
   position: relative;
   height: 0;
@@ -470,6 +481,7 @@ transform: rotate(360deg);
 .secure-evidence-form .form-btn {
   margin-top: 27px;
 }
+
 .form-button {
   display: flex;
   justify-content: flex-end;
@@ -479,6 +491,7 @@ transform: rotate(360deg);
 .form-button .col-md-2 {
   text-align: right;
 }
+
 .reset-btn{
   color: #ffffff;
   background-color: #141414;
@@ -490,9 +503,10 @@ transform: rotate(360deg);
   width: 150px;
   border-radius: 10px;
 }
+
 .submit-btn {
   color: #ffffff;
-  background-color: #000a20;
+  background-color: #000000;
   margin-top: 10px;
   font-weight: bold;
   height: 40px;
@@ -510,6 +524,7 @@ transform: rotate(360deg);
   color: rgb(0, 0, 0);
   background-color: rgb(255, 255, 255)
 }
+
 .description-container {
   position: relative;
   margin-bottom: 20px;
@@ -518,11 +533,85 @@ transform: rotate(360deg);
   height: 264px;
 }
 
-
 .description-input {
   flex-grow: 1;
   height: 40px;
   resize: none;
 }
+/* --------------------------------------------------------------------------------------------------- */
+/* success snd error massage */
 
+.custom-modal-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: 300px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px !important;
+}
+
+.message-title {
+  margin-top: 0;
+  font-size: 25px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.message {
+  margin-bottom: 25px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.message-button {
+  border: none;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 10px 20px;
+  width: 100px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.success-custom-modal-content {
+  background-color: rgb(158, 245, 248) !important;
+}
+
+.success-message-title {
+  color: rgb(0, 92, 12);
+}
+
+.success-message {
+  color: rgb(0, 88, 12);
+}
+
+.success-button {
+  color: rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0);
+}
+
+.error-custom-modal-content {
+  background-color: rgb(158, 245, 248) !important;
+}
+
+.error-message-title {
+  color: rgb(92, 14, 0);
+}
+
+.error-message {
+  color: rgb(88, 13, 0);
+}
+
+.error-button {
+  color: rgb(255, 255, 255);
+  background-color: rgb(235, 0, 0);
+}
 

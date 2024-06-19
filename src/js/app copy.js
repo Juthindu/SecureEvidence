@@ -52,14 +52,10 @@ App = {
     var loader = $("#loader");
     var content = $("#content");
     var pageContent = $("#page-content");
-    var dashboard =$("#dashboard");
-    var loginLogo =$("#loginLogo");
 
-    loginLogo.show();
     loader.show();
     content.hide();
     pageContent.hide();
-    dashboard.hide();
 
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
@@ -68,11 +64,10 @@ App = {
         if (App.account) {
           $("#accountAddress").html("Your Account: " + App.account);
           if (localStorage.getItem('isLoggedIn') === 'true') {
-            $("#loginLogo").hide();
             $("#loader").hide();
             $("#content").hide();
             $("#page-content").show();
-            $("#dashboard").show();
+            
             App.resetLogoutTimer();
           } else {
             $("#loader").hide();
@@ -99,10 +94,32 @@ App = {
     $("#logoutButton").click(function() {
       App.logout();
     });
+
+    $("#addTypeForm").submit(function(event) {
+      event.preventDefault(); // Prevent the form from refreshing the page
+      App.addType();
+    });
+
+    $('#errorMassageModal').on('click', '.error-button', function() {
+      $('#errorMassageModal').modal('hide');
+    });
+
+    $("#resetButton").click(function(event) {
+      event.preventDefault();
+      App.resetForm();
+    });
+
+    $('#dashboard').click(function(event) {
+      window.location.href = 'dashboard.html'; 
+  });
+
+    $('#addCaseTypeLink').click(function(event) {
+        window.location.href = 'addType.html'; 
+    });
+
     document.addEventListener('mousemove', App.resetLogoutTimer);
     document.addEventListener('keydown', App.resetLogoutTimer);
     document.addEventListener('click', App.resetLogoutTimer);
-
   },
 
   connectAccount: async function() {
@@ -120,7 +137,6 @@ App = {
     }
   },
 
-
   login: function() {
     var username = $("#username").val();
     if (username === "") {
@@ -133,75 +149,132 @@ App = {
       $("#loginMessage").html(result);
       if (result.includes("Welcome")) {
         console.log("Super Admin logged ");
-        $("#loginLogo").hide();
         $("#content").hide();
         $("#page-content").show();
-        $("#dashboard").show();
         localStorage.setItem('isLoggedIn', 'true');
-        //window.location.href = "dashboard.html";
-        window.location.href = "test.html";
+        window.location.href = "dashboard.html";
       }
     }).catch(function(error) {
       console.error(error);
       $("#loginMessage").html(error);
     });
   },
+
   logout: function() {
     localStorage.setItem('isLoggedIn', 'false');
     $("#page-content").hide();
-    $("#dashboard").hide();
     $("#content").show();
-    $("#loginLogo").show();
     $("#loginMessage").html("You have logged out.");
     window.location.href = "index.html";
     if (App.logoutTimeout) {
-      clearTimeout(App.logoutTimeout); // Clear the logout timeout when logging out
+      clearTimeout(App.logoutTimeout); 
     }
   },
 
   resetLogoutTimer: function() {
     if (App.logoutTimeout) {
-      clearTimeout(App.logoutTimeout); // Clear existing timeout
+      clearTimeout(App.logoutTimeout); 
     }
-    App.logoutTimeout = setTimeout(App.logout, App.logoutTimeLimit); // Set new timeout
+    App.logoutTimeout = setTimeout(App.logout, App.logoutTimeLimit); 
   },
+
+  resetForm: function() { 
+    rotateLogo();
+    $('#addTypeForm')[0].reset();
+  },
+
+  addType: async function() {
+    $('#addTypeSubmit').prop('disabled', true);
+    const caseType = document.getElementById('caseType').value;
+    const description = document.getElementById('description').value;
+    const category = document.getElementById('category').value;
+    const level = document.getElementById('level').value;
+
+    console.log('Form submitted:', { caseType, description, category, level });
+
+    try {
+      const instance = await App.contracts.SecureEvidence.deployed();
+      const result = await instance.addType(caseType, description, category, level, { from: App.account, gas: 500000 });
+      console.log('Transaction Hash:', result.tx);
+
+      web3.eth.getTransactionReceipt(result.tx, function(error, receipt) {
+        if (error) {
+          console.error('Error retrieving transaction receipt:', error);
+          showErrorModal('Error retrieving transaction receipt: ' + error.message);
+        } else {
+          console.log('Transaction Receipt:', receipt);
+          if (receipt && receipt.status) {
+            console.log('Transaction was successful and data was added');
+            showSuccessModal('Transaction was successful and data was added');
+          } else {
+            console.log('Transaction failed or data was not added');
+            showErrorModal('Transaction failed or data was not added');
+          }
+        }
+        $('#addTypeSubmit').prop('disabled', false);
+      });
+    } catch (error) {
+      console.error('Error adding type:', error);
+      showErrorModal('Error adding type: Please check the data and retry again');
+      $('#addTypeSubmit').prop('disabled', false);
+    }
+  }
+  
 };
+
+function showSuccessModal(message) {
+  $('#successMassageModalLabel').text('SUCCESSFUL');
+  $('#successMessage').text(message);
+  $('#successMassageModal').modal('show');
+  setTimeout(function() {
+    $('#successMassageModal').modal('hide');
+    App.resetForm();
+  }, 2000);
+}
+
+function showErrorModal(message) {
+  $('#errorMassageModalLabel').text('ERROR');
+  $('#errorMessage').text(message);
+  $('#errorMassageModal').modal('show');
+}
+
+function rotateLogo() {
+  const logo = document.getElementById('logo').querySelector('img');
+  logo.classList.add('rotated'); 
+  setTimeout(() => {
+    logo.classList.remove('rotated'); 
+  }, 1000);
+}
 
 $(document).ready(function() {
   App.init();
 });
 
-
-// page-content component
-
-
+// sidebar component
 $(document).ready(function () {
   var trigger = $('.hamburger'),
       overlay = $('.overlay'),
      isClosed = false;
 
-    trigger.click(function () {
-      hamburger_cross();      
-    });
+  trigger.click(function () {
+    hamburger_cross();      
+  });
 
-    function hamburger_cross() {
-
-      if (isClosed == true) {          
-        overlay.hide();
-        trigger.removeClass('is-open');
-        trigger.addClass('is-closed');
-        isClosed = false;
-      } else {   
-        overlay.show();
-        trigger.removeClass('is-closed');
-        trigger.addClass('is-open');
-        isClosed = true;
-      }
+  function hamburger_cross() {
+    if (isClosed == true) {          
+      overlay.hide();
+      trigger.removeClass('is-open');
+      trigger.addClass('is-closed');
+      isClosed = false;
+    } else {   
+      overlay.show();
+      trigger.removeClass('is-closed');
+      trigger.addClass('is-open');
+      isClosed = true;
+    }
   }
   
   $('[data-toggle="offcanvas"]').click(function () {
-        $('#wrapper').toggleClass('toggled');
+    $('#wrapper').toggleClass('toggled');
   });  
 });
-
-
