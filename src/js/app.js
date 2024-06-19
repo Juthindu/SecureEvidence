@@ -111,12 +111,11 @@ App = {
 
     $('#dashboard').click(function(event) {
       window.location.href = 'dashboard.html'; 
-  });
+    });
 
     $('#addCaseTypeLink').click(function(event) {
         window.location.href = 'addType.html'; 
     });
-
     document.addEventListener('mousemove', App.resetLogoutTimer);
     document.addEventListener('keydown', App.resetLogoutTimer);
     document.addEventListener('click', App.resetLogoutTimer);
@@ -250,31 +249,4 @@ $(document).ready(function() {
   App.init();
 });
 
-// sidebar component
-$(document).ready(function () {
-  var trigger = $('.hamburger'),
-      overlay = $('.overlay'),
-     isClosed = false;
 
-  trigger.click(function () {
-    hamburger_cross();      
-  });
-
-  function hamburger_cross() {
-    if (isClosed == true) {          
-      overlay.hide();
-      trigger.removeClass('is-open');
-      trigger.addClass('is-closed');
-      isClosed = false;
-    } else {   
-      overlay.show();
-      trigger.removeClass('is-closed');
-      trigger.addClass('is-open');
-      isClosed = true;
-    }
-  }
-  
-  $('[data-toggle="offcanvas"]').click(function () {
-    $('#wrapper').toggleClass('toggled');
-  });  
-});
