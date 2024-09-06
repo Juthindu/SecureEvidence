@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AddNewCase</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans:400" rel="stylesheet">
+  </head>
+  <body>
+    <div class="logo" id="logo">
+      <img src="../images/logo.png"  class="logo">
+    </div>
+    <div class="title"></div>
+    <div id="page-content">
+      <div id="wrapper">
+        <div class="overlay"></div>
+        <div id="sidebar-container"></div>
+        <div id="secure-evidence" class="section">
+          <div class="section-center">
+            <div class="container">
+              <h1 class="form-heading ">VIEW CASE</h1>
+              <div class="row">                        
+                <div class="secure-evidence-form">
+                  <form id="viewCaseForm">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <span class="form-label" style="padding-top:10px;">Enter Case ID:</span>
+                      </div>
+                      <div class="col-md-3">
+                        <input class="form-control" type="text" id="caseID" placeholder="Enter case ID" required>
+                      </div>
+                      <div class="col-md-2 text-right">
+                        <button type="submit" class="search-btn" id="searchCaseButton" style="margin-left:100px;">Search</button>
+                      </div>
+                    </div>
+                    <div id="caseData" class="row mt-3" style="display: none;">
+                      <div class="col-md-12">
+                        <table class="table table-type table-bordered">
+                          <thead class="table-columns">
+                            <tr>
+                              <th class="th5">Case Title</th>
+                              <th class="th2">Case ID</th>
+                              <th class="th2">Case Type ID</th>
+                              <th class="th6">Added By</th>
+                              <th class="th1">Status</th>
+                              <th class="th2">Report</th>
+                            </tr>
+                          </thead>
+                          <tbody id="userTableBody" class="table-body">
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!--page-content-->
+    <div id="massage-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@truffle/contract/dist/truffle-contract.min.js"></script>
+    <script src="../app.js"></script>
+    <script>
+      $(document).ready(function() {
+        $("#sidebar-container").load("../sidebar.html"); 
+        $("#massage-container").load("../massage.html"); 
+      });
+  </script>
+  </body>
+</html>

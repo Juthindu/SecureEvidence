@@ -1,0 +1,17 @@
+{
+  "name": "imageStore",
+  "version": "1.0.0",
+  "description": "A simple DApp to store images on IPFS and Ethereum",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "dependencies": {
+    "ipfs-http-client": "^60.0.1",
+    "truffle-contract": "^4.0.31",
+    "web3": "^4.10.0"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
