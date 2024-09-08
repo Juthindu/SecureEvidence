@@ -11,17 +11,6 @@
     <link href="https://fonts.googleapis.com/css?family=PT+Sans:400" rel="stylesheet">
   </head>
   <body>
-    <!-- <div class="logo" id="logo">
-      <img src="../images/logo.png"  class="logo">
-    </div>
-    <div class="title"></div>
-    <div id="page-content">
-      <div id="wrapper">
-        <div class="overlay"></div>
-        <div id="sidebar-container"></div>
-      </div>
-    </div>page-content -->
-
     <div class="logo" id="logo">
       <img src="../images/logo.png" class="logo">
     </div>
@@ -29,12 +18,10 @@
     <div id="page-content">
       <div id="wrapper">
         <div class="overlay"></div>
-
-        <!-- Sidebar for displaying case statistics -->
         <div id="sidebar-container"></div>
         <div class="containerone">
-        <div class="dashborddata">
-          <h4>Case Statistics</h4>
+          <div class="dashborddata">
+            <h4 class="dbheads">Case Statistics</h4>
             <li class="list-group-item d-flex justify-content-between align-items-center">
               Open Cases
               <span id="openCases" class="badge badge-primary badge-pill xxx">000</span>
@@ -51,60 +38,60 @@
               Case Types
               <span id="caseTypes" class="badge badge-info badge-pill">000</span>
             </li>
-        </div>
-        <div class="xx">
-                  <div class="containerGuideline mt-5">
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <h5>Guideline</h5>
-              <p>Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...
-                Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...
-                Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...
-                Follow these steps for case management and evidence handling...Follow these steps for case management and evidence handling...
-              </p>
-              <button class="btn btn-primary">Download</button>
-            </div>
           </div>
-        </div>
-      </div></div>
-
-        <!-- Right side for displaying images and names -->
-        <div class="col-md-8 p-4">
-          <h4>Recent Case Officers</h4>
-          <div class="row" id="officer-list">
-            <!-- Dynamically inserted officer cards -->
-            <div class="col-md-4">
-              <div class="card mb-3">
-                <img src="../images/officer1.jpg" class="card-img-top" alt="Officer 1">
-                <div class="card-body">
-                  <h5 class="card-title">Officer 1</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card mb-3">
-                <img src="../images/officer2.jpg" class="card-img-top" alt="Officer 2">
-                <div class="card-body">
-                  <h5 class="card-title">Officer 2</h5>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card mb-3">
-                <img src="../images/officer3.jpg" class="card-img-top" alt="Officer 3">
-                <div class="card-body">
-                  <h5 class="card-title">Officer 3</h5>
-                </div>
+        <div class="guideline">
+          <div class="containerGuideline mt-5">
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <h4 class="dbheads">Guideline</h4>
+                <p>Welcome to **SecureEvidence**, a state-of-the-art web application designed to manage and secure evidence for criminal cases using blockchain technology and the InterPlanetary File System (IPFS). Our platform ensures that evidence remains tamper-proof, immutable, and accessible only to authorized users. By leveraging these advanced technologies, SecureEvidence provides a transparent and decentralized system that guarantees the integrity and traceability of evidence. The application supports various user roles, including Super Admin, Level One (Admin), and Level Two, each with specific permissions to facilitate secure and efficient management. Whether you're adding new evidence, managing cases, or updating user roles, SecureEvidence ensures that all operations are conducted with the highest level of security and accuracy.
+                </p>
+                <button class="btn btn-primary guidelinebtn">Download</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div><!-- page-content -->
+      <div class="col-md-12 p-4 suspectscontainer">
+        <h4 class="dbheads">Most Wanted Criminal Suspects</h4>
+        <div class="row" id="officer-list">
+          <div class="col-md-3">
+            <div class="card mb-3">
+              <img src="../images/suspects.png" class="card-img-top" alt="Officer 1">
+              <div class="card-body">
+                <h5 class="card-title">Details</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card mb-3">
+            <img src="../images/suspects.png" class="card-img-top" alt="Officer 2">
+            <div class="card-body">
+              <h5 class="card-title">Details</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card mb-3">
+            <img src="../images/suspects.png" class="card-img-top" alt="Officer 3">
+            <div class="card-body">
+              <h5 class="card-title">Details</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card mb-3">
+            <img src="../images/suspects.png" class="card-img-top" alt="Officer 4">
+            <div class="card-body">
+              <h5 class="card-title"><Data>Details</Data></h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- page-content -->
 
-    <!-- Bottom section for Guidelines -->
-
-    
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -120,3 +107,5 @@
       </script>
   </body>
 </html>
+
+
